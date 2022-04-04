@@ -1,0 +1,56 @@
+package vttp2022.paf.day11.Repository;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Repository;
+
+import vttp2022.paf.day11.models.Comment;
+import vttp2022.paf.day11.models.Game;
+
+
+@Repository
+public class GameRepository implements Queries{
+
+    
+    @Autowired
+    private JdbcTemplate template;
+
+    public List<Comment> getCommentsByGid(Integer gid){
+            return getCommentsByGid(gid, Integer.MAX_VALUE, 0);
+    }
+
+    public List<Comment> getCommentsByGid(Integer gid, Integer limit){
+        return getCommentsByGid(gid, limit, 0);
+    }
+
+    public List<Comment> getCommentsByGid(Integer gid, 
+            Integer limit, Integer offset){
+
+        final List<Comment> comments = new LinkedList<>();
+        
+        final SqlRowSet results = template
+                    .queryForRowSet(SQL_SELECT_COMMENT_BY_GID, gid,limit, offset);
+
+        while(results.next()){
+            Comment comment = Comment.create(results);
+            comments.add(comment);
+        }
+        return comments;
+    }
+
+    public Optional<Game> getGameByGid(Integer queryGid){
+
+        final SqlRowSet result = template
+                    .queryForRowSet(SQL_SELECT_BY_GAME_GID, queryGid);
+        
+        if (!result.next())
+            return Optional.empty();
+        
+        return Optional.of(Game.create(result));
+    }
+}

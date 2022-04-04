@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Details</title>
+</head>
+<body>
+    <h1>Name of game: <span data-th-text="${name}"></span></h1>
+    <h1>Year of Release: <span data-th-text="${year}"></span></h1>
+    <h1>Ranking: <span data-th-text="${ranking}"></span></h1>
+    <h1>Users Rated: <span data-th-text="${usersRated}"></span></h1>
+    <h1>URL: <span data-th-text="${url}"></span></h1>
+    <img data-th-src="${image}" width="200px" height="200px">
+
+    <c:forEach items="${comments}" var="comment">
+    <span data-th-text="${comment}"></span>
+    </c:forEach>
+</body>
+</html>
